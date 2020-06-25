@@ -35,6 +35,7 @@ double Chassis::diameter = 3.25;
 
 double Chassis::calculatedAngle = 0;
 
+
 Chassis::Chassis() {}
 
 Chassis::~Chassis()

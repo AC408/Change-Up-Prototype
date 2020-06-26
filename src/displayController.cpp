@@ -6,8 +6,13 @@
 #include "misc.h"
 
 #include "chassis.h"
+#include "intake.h"
+#include "conveyor.h"
 
 static Autonomous Auton;
+static Conveyor conveyor;
+static Intake intake;
+static Chassis chassis;
 
 bool Display::isRunning = false,
      Display::isInitialized = false;
@@ -149,6 +154,7 @@ Display::Display()
         tabMatch(tab1);
         tabSkills(tab2);
         tabSensor(tab3);
+        tabSetting(tab4);
 
         lv_tabview_set_tab_act(tv, 0, false);
 
@@ -205,6 +211,15 @@ void Display::tabSkills(lv_obj_t *parent)
 
 void Display::tabSensor(lv_obj_t *parent)
 {
+    //display Intake Linetracker       //reset Intake Linetracker
+    //display Conveyor Linetracker     //reset Conveyor Linetracker
+    //display both IMU                 //reset both IMU
+    //calculate heading
+}
+
+void Display::tabSetting(lv_obj_t *parent){
+    //display current x, y, theta
+    //display current pid for chassis
 }
 
 void Display::start(void *ignore)

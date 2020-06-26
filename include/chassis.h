@@ -49,6 +49,19 @@ public:
 
     void track();
     void pid(double targetx, double targety, double targeta);
+    double getX();
+    double getY();
+    double getTheta();
+    double getDriveP();
+    double getDriveI();
+    double getDriveD();
+    double getTurnP();
+    double getTurnI();
+    double getTurnD();
+    double getIMUL();
+    double getIMUR();
+    void resetIMU();
+    void resetEncoder();
 
 private:
     static bool isRunning;

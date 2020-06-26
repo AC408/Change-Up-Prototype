@@ -12,7 +12,7 @@ class Conveyor
         Conveyor();
         ~Conveyor();
 
-        Conveyor& zero();
+        void zero();
 
         void reset();
 
@@ -33,6 +33,8 @@ class Conveyor
 
         void switchMode(double tarmode);
         void position(int ball);
+
+        double get_line();
 
     private:
         static bool isRunning;

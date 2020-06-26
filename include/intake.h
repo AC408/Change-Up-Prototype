@@ -12,7 +12,7 @@ class Intake
         Intake();
         ~Intake();
 
-        Intake& zero();
+        void zero();
 
         void reset();
 
@@ -29,6 +29,7 @@ class Intake
 
         void move(int speed);
         void switchMode(double tarmode);
+        double get_line();
 
     private:
         static bool isRunning;

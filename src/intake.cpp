@@ -14,9 +14,13 @@ Intake::Intake() {}
 
 Intake::~Intake() {}
 
-Intake &Intake::zero()
+void Intake::zero()
 {
-    //outtake until bottom limit switch activated
+    in.calibrate();
+}
+
+double Intake::get_line(){
+    return in.get_value_calibrated();
 }
 
 void Intake::reset()

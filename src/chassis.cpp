@@ -373,3 +373,58 @@ void Chassis::pid(double targetx, double targety, double targeta){
         pros::delay(10);
     }
 }
+
+    double Chassis::getX(){
+        return x;
+    }
+
+    double Chassis::getY(){
+        return y;
+    }
+
+    double Chassis::getTheta(){
+        return theta;
+    }
+
+    // double Chassis::getDriveP(){
+    //     return drive_P;
+    // }
+
+    // double Chassis::getDriveI(){
+    //     return drive_I;
+    // }
+
+    // double Chassis::getDriveD(){
+    //     return drive_D;
+    // }
+
+    // double Chassis::getTurnP(){
+    //     return turn_P;
+    // }
+
+    // double Chassis::getTurnI(){
+    //     return turn_I;
+    // }
+
+    // double Chassis::getTurnD(){
+    //     return turn_D;
+    // }
+
+    double Chassis::getIMUL(){
+        return Imu_L.get_heading();
+    }
+
+    double Chassis::getIMUR(){
+        return Imu_R.get_heading();
+    }
+
+    void Chassis::resetIMU(){
+        Imu_L.reset();
+        Imu_R.reset();
+    }
+
+    void Chassis::resetEncoder(){
+        Left.reset();
+        Right.reset();
+        Middle.reset();
+    }

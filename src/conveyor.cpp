@@ -13,15 +13,19 @@ Conveyor::Conveyor() {}
 
 Conveyor::~Conveyor() {}
 
-Conveyor &Conveyor::zero()
+void Conveyor::zero()
 {
-    //outtake until bottom limit switch activated
+    reached.calibrate();
 }
 
 void Conveyor::reset()
 {
     move(0);
     mode = 4;
+}
+
+double Conveyor::get_line(){
+    return reached.get_value_calibrated();
 }
 
 void Conveyor::tarePos()

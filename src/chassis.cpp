@@ -365,7 +365,7 @@ void Chassis::pid(double targetx, double targety, double targeta){
         LF.move((apower+bpower)/2);
         RB.move((apower-bpower)/2);
         RF.move((apower-bpower)/2);
-//        track(); - will be on a task running the entire time
+        track();
         errorx = targetx-x;
         errory = targety-y;
         errora = targeta-theta;

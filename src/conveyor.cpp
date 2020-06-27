@@ -93,6 +93,12 @@ void Conveyor::run()
                 break;
             }
 
+            case 5:
+            {
+                move(127);
+                break;
+            }
+
             default:
             {
                 if (pros::competition::is_autonomous())

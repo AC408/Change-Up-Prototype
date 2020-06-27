@@ -31,7 +31,7 @@ void opcontrol()
         RB.move(master.get_analog(ANALOG_RIGHT_Y)-master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y));
 
         //intake
-        if(master.get_digital(DIGITAL_L1)){
+        if(master.get_digital(DIGITAL_L1)||master.get_digital(DIGITAL_Y)){
             intake.switchMode(1); //forward
         } else if(master.get_digital(DIGITAL_L2)){
             intake.switchMode(2); //backward
@@ -46,7 +46,9 @@ void opcontrol()
             conveyor.switchMode(2); //2
         } else if(master.get_digital(DIGITAL_X)){
             conveyor.switchMode(3); //3
-        } else{
+        } else if(master.get_digital(DIGITAL_Y)){ //reset ball position -> change intake
+            conveyor.switchMode(5); //127
+        } else {
             conveyor.switchMode(4); //off
         }
 

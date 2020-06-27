@@ -1,9 +1,13 @@
 #include "main.h"
 
 #include "chassis.h"
+#include "conveyor.h"
+#include "intake.h"
 #include "misc.h"
 
 static Chassis chassis;
+static Conveyor conveyor;
+static Intake intake;
 
 using namespace io;
 
@@ -47,4 +51,45 @@ void matchhomecenter(){
 ===========================================*/
 void skills1()
 {
+  //dumps preload during deploy
+  chassis.pid(-72, 36, -PI/2);
+  chassis.pid(-72,0,-3*PI/4);
+  //while settled -> every time before switchMode(2)
+    conveyor.switchMode(2);
+  chassis.pid(0,96,0);
+    conveyor.switchMode(5);
+    pros::delay(1000);
+  chassis.pid(0,72,-PI);
+    conveyor.switchMode(2);
+  chassis.pid(-72,72,-PI/2);
+    conveyor.switchMode(5);
+    pros::delay(1000);
+    conveyor.switchMode(2);
+  chassis.pid(-72,108,-PI/2);
+    conveyor.switchMode(5);
+    pros::delay(1000);
+  chassis.pid(-72,144,-PI/4);
+    conveyor.switchMode(2);
+  chassis.pid(-48,120,PI/2);
+    conveyor.switchMode(5);
+    pros::delay(1000);
+  chassis.pid(0,120,0);
+    conveyor.switchMode(2);    
+  chassis.pid(72,144,PI/4);
+    conveyor.switchMode(5);
+    pros::delay(1000);
+    conveyor.switchMode(2);
+  chassis.pid(72,108,PI/2);
+    conveyor.switchMode(5);
+    pros::delay(1000);
+  chassis.pid(0,48,-3*PI/4);
+  chassis.pid(24,72,PI/2);
+  chassis.pid(72,72,PI/2);
+    conveyor.switchMode(2);
+  chassis.pid(72,36,PI/2);
+    conveyor.switchMode(5);
+    pros::delay(1000);
+  chassis.pid(36,24,-PI);
+  chassis.pid(72,0,3*PI/4);
+    conveyor.switchMode(2);
 }

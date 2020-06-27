@@ -63,7 +63,7 @@ void Conveyor::run()
         switch (mode)
         {
             count = 0;
-            if(reached.get_value_calibrated()==100){
+            if(reached.get_value_calibrated()==100){ //detects if ball is already present
                 count = 1;
             }
             // Score 1 ball
@@ -128,20 +128,20 @@ void Conveyor::move(int speed)
     conveyorR.move(speed);
 }
 
-void Conveyor::position(int balls){
+void Conveyor::position(int balls){ 
     while(count<balls){
-        if(reached.get_value_calibrated()>100){
+        if(reached.get_value_calibrated()>100){ //run full speed until ball is detected
             move(127);
         } else{
-            while(reached.get_value_calibrated()<90){
+            while(reached.get_value_calibrated()<90){ //slows down to accurately track ball
                 move(70);
                 pros::delay(10);
             }
             count++;
         } pros::delay(10);
     } 
-    while(reached.get_value_calibrated()>100){
+    while(reached.get_value_calibrated()>100){ //primes next ball
         move(127);
         pros::delay(10);
-    } move(0);
+    } mode = 4;
 }

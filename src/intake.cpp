@@ -84,7 +84,7 @@ void Intake::run()
                 break;
             }
 
-            // Autointake - auton
+            // Autointake - auton -> if it detects a ball, runs intake
             case 4:
             {
                 while(true){
@@ -103,6 +103,7 @@ void Intake::run()
                     intakeL.set_brake_mode(MOTOR_BRAKE_HOLD);
                     intakeR.set_brake_mode(MOTOR_BRAKE_HOLD);
                     in.calibrate();
+                    mode = 4;
                     break;
                 }
             }

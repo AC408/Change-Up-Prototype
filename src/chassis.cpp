@@ -303,14 +303,15 @@ void Chassis::track(){
         double left = getLeft();
         double mid = getMid();
         double ang = ((left - lastLeft) - (right - lastRight))/base;
-        h = right - lastRight;
+        h = left - lastLeft;
         h2 = mid - lastMid;
-        if(ang!=0) {
+        if(ang!=0) { //calculations when the robot moves in an arc
             double radS = h/ang;
-            h = (2*radS + base)*sin(ang/2);
+            h = (2*radS + base)*sin(ang/2); //side 
             double radB = h2/ang;
-            h2 = (radB + back)*2*sin(ang/2);
+            h2 = (radB + back)*2*sin(ang/2); //back
         } 
+        //x and y calculated by getting x and y component of arc created from turning and strafing
         x = x + h2*cos(theta+ang/2) + h*sin(theta+ang/2);
         y = y - h2*sin(theta+ang/2) + h*cos(theta+ang/2);
         theta += ang;   
@@ -327,10 +328,10 @@ void Chassis::pid(double targetx, double targety, double targeta){
     errory = targety - y;
     errora = targeta - theta;
 
-    desireda = atan2(targety-y,targetx-x);
-    rad = errorx*cos(desireda);
+    desireda = atan2(targety-y,targetx-x); //calculate angle of closest approach
+    rad = errorx*cos(desireda); //radius = distance
     while(1){
-        if(errorx == 0&&errory==0){
+        if(errorx == 0&&errory==0){ //turning
             if(errora == 0){
                 break;
             } else {
@@ -338,6 +339,7 @@ void Chassis::pid(double targetx, double targety, double targeta){
                 bpower = kP_turn*errora;
             }
         } else{
+            //finds closest cardinal direction - using 4 motors are better than 2
             if(desireda>=-PI&&desireda<(-3*PI/4)){
                 tarA = -PI;
                 tarB = desireda+PI;
@@ -354,18 +356,22 @@ void Chassis::pid(double targetx, double targety, double targeta){
                 tarA = PI;
                 tarB = desireda-PI;
             }   
-            apower = kP_drive*rad;
-            if (rad>(24.06/34.033)*(tarB-theta)){
+            apower = kP_drive*rad; //linear component
+            if (rad>(24.06/34.033)*(tarB-theta)){ //calculated from kinematics
+            //if the distance left is less, it's optimal to start heading to desired angle or you'll waste time idling
                 bpower = kP_turn*(tarA-theta);
             } else{
-                bpower = kP_turn*(tarB-theta);
+                bpower = kP_turn*(tarB-theta); //tarB is error in angle from turning to cardinal direction first
             }
         }
+        //average power to prevent rapid change in voltage
         LB.move((apower+bpower)/2);
         LF.move((apower+bpower)/2);
         RB.move((apower-bpower)/2);
         RF.move((apower-bpower)/2);
+        //recalculates x, y, theta
         track();
+        //recalculates error
         errorx = targetx-x;
         errory = targety-y;
         errora = targeta-theta;
@@ -374,57 +380,57 @@ void Chassis::pid(double targetx, double targety, double targeta){
     }
 }
 
-    double Chassis::getX(){
-        return x;
-    }
+double Chassis::getX(){
+    return x;
+}
 
-    double Chassis::getY(){
-        return y;
-    }
+double Chassis::getY(){
+    return y;
+}
 
-    double Chassis::getTheta(){
-        return theta;
-    }
+double Chassis::getTheta(){
+    return theta;
+}
 
-    // double Chassis::getDriveP(){
-    //     return drive_P;
-    // }
+// double Chassis::getDriveP(){
+//     return drive_P;
+// }
 
-    // double Chassis::getDriveI(){
-    //     return drive_I;
-    // }
+// double Chassis::getDriveI(){
+//     return drive_I;
+// }
 
-    // double Chassis::getDriveD(){
-    //     return drive_D;
-    // }
+// double Chassis::getDriveD(){
+//     return drive_D;
+// }
 
-    // double Chassis::getTurnP(){
-    //     return turn_P;
-    // }
+// double Chassis::getTurnP(){
+//     return turn_P;
+// }
 
-    // double Chassis::getTurnI(){
-    //     return turn_I;
-    // }
+// double Chassis::getTurnI(){
+//     return turn_I;
+// }
 
-    // double Chassis::getTurnD(){
-    //     return turn_D;
-    // }
+// double Chassis::getTurnD(){
+//     return turn_D;
+// }
 
-    double Chassis::getIMUL(){
-        return Imu_L.get_heading();
-    }
+double Chassis::getIMUL(){
+    return Imu_L.get_heading();
+}
 
-    double Chassis::getIMUR(){
-        return Imu_R.get_heading();
-    }
+double Chassis::getIMUR(){
+    return Imu_R.get_heading();
+}
 
-    void Chassis::resetIMU(){
-        Imu_L.reset();
-        Imu_R.reset();
-    }
+void Chassis::resetIMU(){
+    Imu_L.reset();
+    Imu_R.reset();
+}
 
-    void Chassis::resetEncoder(){
-        Left.reset();
-        Right.reset();
-        Middle.reset();
-    }
+void Chassis::resetEncoder(){
+    Left.reset();
+    Right.reset();
+    Middle.reset();
+}

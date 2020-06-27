@@ -37,6 +37,29 @@ static lv_obj_t *scr;
 static lv_obj_t *tv;
 
 static lv_obj_t *autonName;
+static lv_obj_t *intakeLine;
+static lv_obj_t *conveyorLine;
+static lv_obj_t *intakeLine;
+static lv_obj_t *imuHeading;
+
+static lv_obj_t *global_x;
+static lv_obj_t *global_y;
+static lv_obj_t *global_a;
+
+
+static lv_res_t btn_click_action(lv_obj_t * btn) {
+  int id = lv_obj_get_free_num(btn);
+
+  switch(id) {
+    case 1: conveyor.zero(); break;
+    case 2: intake.zero(); break;
+    case 3: chassis.resetIMU(); break;
+
+    default: break;
+  }
+
+  return LV_RES_OK;
+}
 
 static lv_res_t match_click_action(lv_obj_t *btn)
 {
@@ -197,11 +220,11 @@ void Display::tabSkills(lv_obj_t *parent)
     {
         if ((i + 1) % 2 == 1)
         {
-            btnms[i] = createButton(i, 0, (int)(i / 2) * 35 + 20, 220, 30, Auton.getName(2, i), parent, skills_click_action);
+            btnms[i] = createButton(i, 0, (int)(i / 2) * 35 + 20, 200, 30, Auton.getName(2, i), parent, skills_click_action);
         }
         else
         {
-            btnms[i] = createButton(i, 230, (int)(i / 2) * 35 + 20, 220, 30, Auton.getName(2, i), parent, skills_click_action);
+            btnms[i] = createButton(i, 230, (int)(i / 2) * 35 + 20, 200, 30, Auton.getName(2, i), parent, skills_click_action);
         }
 
         lv_btn_set_style(btnms[i], LV_BTN_STYLE_PR, &style_skills);
@@ -211,15 +234,65 @@ void Display::tabSkills(lv_obj_t *parent)
 
 void Display::tabSensor(lv_obj_t *parent)
 {
+    lv_obj_t * conveyorTracker = createButton(1, 230, 20, 200, 30, "Reset Conveyor line", parent, btn_click_action, &style_skills, &style_skills_released);
+    lv_obj_t * intakeTracker = createButton(2, 230, 55, 200, 30, "Reset Intake line", parent, btn_click_action, &style_skills, &style_skills_released);
+    lv_obj_t * resetIMU = createButton(3, 230, 90, 200, 30, "Reset IMU", parent, btn_click_action, &style_skills, &style_skills_released);
+
+    lv_obj_t *intakeOverlay = lv_cont_create(lv_scr_act(), NULL);
+    lv_obj_set_size(intakeOverlay, 200, 30);
+    lv_obj_set_pos(intakeOverlay, 0, 20);
+
+    intakeLine = createLabel(0, 0, "Intake Line: ", intakeOverlay);
+    lv_obj_align(intakeLine, NULL, LV_ALIGN_IN_LEFT_MID, 5, -4);
+
+    // lv_obj_t *conveyorOverlay = lv_cont_create(lv_scr_act(), NULL);
+    // lv_obj_set_size(conveyorOverlay, 200, 30);
+    // lv_obj_set_pos(conveyorOverlay, 0, 20);
+
+    // conveyorLine = createLabel(0, 0, "Conveyor Line: ", conveyorOverlay);
+    // lv_obj_align(conveyorLine, NULL, LV_ALIGN_IN_LEFT_MID, 5, -4);
+    
+    // lv_obj_t *imuOverlay = lv_cont_create(lv_scr_act(), NULL);
+    // lv_obj_set_size(imuOverlay, 200, 30);
+    // lv_obj_set_pos(imuOverlay, 0, 20);
+
+    // imuHeading = createLabel(0, 0, "Imu Heading: ", imuOverlay);
+    // lv_obj_align(imuHeading, NULL, LV_ALIGN_IN_LEFT_MID, 5, -4);
+    
+
     //display Intake Linetracker       //reset Intake Linetracker
     //display Conveyor Linetracker     //reset Conveyor Linetracker
     //display both IMU                 //reset both IMU
-    //calculate heading
+    //calculate heading                 
+
+    //encoder?
 }
 
 void Display::tabSetting(lv_obj_t *parent){
+
+    lv_obj_t *x_track = lv_cont_create(lv_scr_act(), NULL);
+    lv_obj_set_size(x_track, 200, 30);
+    lv_obj_set_pos(x_track, 0, 20);
+
+    global_x = createLabel(0, 0, "X: ", x_track);
+    lv_obj_align(global_x, NULL, LV_ALIGN_IN_LEFT_MID, 5, -4);
+    
+    // lv_obj_t *y_track = lv_cont_create(lv_scr_act(), NULL);
+    // lv_obj_set_size(y_track, 200, 30);
+    // lv_obj_set_pos(y_track, 0, 20);
+
+    // global_y = createLabel(0, 0, "Y: ", y_track);
+    // lv_obj_align(global_y, NULL, LV_ALIGN_IN_LEFT_MID, 5, -4);
+    
+    // lv_obj_t *a_track = lv_cont_create(lv_scr_act(), NULL);
+    // lv_obj_set_size(a_track, 200, 30);
+    // lv_obj_set_pos(a_track, 0, 20);
+
+    // global_a = createLabel(0, 0, "Theta:", a_track);
+    // lv_obj_align(global_a, NULL, LV_ALIGN_IN_LEFT_MID, 5, -4);
+    
     //display current x, y, theta
-    //display current pid for chassis
+    //    //display current pid for chassis
 }
 
 void Display::start(void *ignore)
@@ -279,6 +352,16 @@ void Display::run()
                 lv_label_set_text(updateInfo[i].labelObj, update.c_str());
                 updateInfo[i].last = temp;
             }
+        }
+
+        if(lv_tabview_get_tab_act(tv)==lv_tabview_get_tab_act(tab3)){
+            std::string temp = "Intake Line: " + std::to_string(intake.get_line());
+            lv_label_set_text(intakeLine, temp.c_str());
+        }
+
+        if(lv_tabview_get_tab_act(tv)==lv_tabview_get_tab_act(tab4)){
+            std::string temp = "X: " + std::to_string(chassis.getX());
+            lv_label_set_text(global_x, temp.c_str());
         }
 
         remoteUpdate();

@@ -323,17 +323,19 @@ void Chassis::track(){
     }
 }
 
-void Chassis::pid(double targetx, double targety, double targeta){
+//might be void
+Chassis& Chassis::pid(double targetx, double targety, double targeta){
+    isSettled = false;
     errorx = targetx - x;
     errory = targety - y;
     errora = targeta - theta;
 
     desireda = atan2(targety-y,targetx-x); //calculate angle of closest approach
     rad = errorx*cos(desireda); //radius = distance
-    while(1){
+    while(!isSettled){
         if(errorx == 0&&errory==0){ //turning
             if(errora == 0){
-                break;
+                isSettled = true;
             } else {
                 apower = 0;
                 bpower = kP_turn*errora;
@@ -364,6 +366,10 @@ void Chassis::pid(double targetx, double targety, double targeta){
                 bpower = kP_turn*(tarB-theta); //tarB is error in angle from turning to cardinal direction first
             }
         }
+
+        //possible "async" calling to conveyor to outtake opponent balls
+        //use mode 7 - does not overwrite conveyor motors
+        
         //average power to prevent rapid change in voltage
         LB.move((apower+bpower)/2);
         LF.move((apower+bpower)/2);
@@ -377,7 +383,19 @@ void Chassis::pid(double targetx, double targety, double targeta){
         errora = targeta-theta;
         rad = errorx*cos(desireda);
         pros::delay(10);
+        if(errorx<10&&errory<10&&errora<10){
+            isSettled = true;
+            errorx = errory = errora = 0;
+            LB.move(0);
+            LF.move(0);
+            RB.move(0);
+            RF.move(0);
+        }
     }
+}
+
+bool Chassis::getSettled(){
+    return isSettled;
 }
 
 double Chassis::getX(){

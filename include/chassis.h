@@ -48,7 +48,7 @@ public:
     void left(double speed);
 
     void track();
-    void pid(double targetx, double targety, double targeta);
+    Chassis& pid(double targetx, double targety, double targeta);
     double getX();
     double getY();
     double getTheta();
@@ -62,6 +62,7 @@ public:
     double getIMUR();
     void resetIMU();
     void resetEncoder();
+    bool getSettled();
 
 private:
     static bool isRunning;

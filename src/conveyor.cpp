@@ -8,6 +8,7 @@ bool Conveyor::isRunning = false;
 int Conveyor::mode = 0;
 bool Conveyor::is_reached = false;
 int Conveyor::count = 0;
+bool Conveyor::gate = true;
 
 Conveyor::Conveyor() {}
 
@@ -60,6 +61,9 @@ void Conveyor::run()
     isRunning = true;
     while (isRunning)
     {
+        if (!pros::competition::is_autonomous()&&gate){
+            mode = 4;
+        }
         switch (mode)
         {
             count = 0;
@@ -99,6 +103,17 @@ void Conveyor::run()
                 break;
             }
 
+            case 6:
+            {
+                move(-127);
+                break;
+            }
+
+            case 7:
+            {
+                break;
+            }
+            
             default:
             {
                 if (pros::competition::is_autonomous())
@@ -144,4 +159,8 @@ void Conveyor::position(int balls){
         move(127);
         pros::delay(10);
     } mode = 4;
+}
+
+void Conveyor::switchGate(){
+    gate = false;
 }

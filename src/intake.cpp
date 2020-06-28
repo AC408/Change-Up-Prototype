@@ -9,6 +9,7 @@ bool Intake::isRunning = false;
 int Intake::mode = 0;
 
 bool Intake::is_in = false;
+bool Intake::gate = true;
 
 Intake::Intake() {}
 
@@ -61,6 +62,9 @@ void Intake::run()
     isRunning = true;
     while (isRunning)
     {
+        if (!pros::competition::is_autonomous()&&gate){
+            mode = 3;
+        }
         switch (mode)
         {
             // Intake
@@ -126,4 +130,8 @@ void Intake::move(int speed)
 {
     intakeL.move(speed);
     intakeR.move(speed);
+}
+
+void Intake::switchGate(){
+    gate = false;
 }

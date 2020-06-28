@@ -30,9 +30,11 @@ class Intake
         void move(int speed);
         void switchMode(double tarmode);
         double get_line();
+        void switchGate();
 
     private:
         static bool isRunning;
         static int mode;
-        static bool is_in;        
+        static bool is_in;
+        static bool gate;        
 };

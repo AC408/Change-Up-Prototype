@@ -39,7 +39,14 @@ void tester()
 
 void matchhomerow()
 {
-
+  chassis.pid(0,6,0);
+    conveyor.switchMode(1);
+  chassis.pid(0,-78,3*PI/4); //might hit wall or hit ball
+    conveyor.switchMode(5); //might be moved to one line before
+    pros::delay(1000); //probably be removed -> how to async and block
+    conveyor.switchMode(1);
+  chassis.pid(0,-72,PI/2);
+    conveyor.switchMode(5);
 }
 
 void matchhomecenter(){
@@ -53,43 +60,71 @@ void skills1()
 {
   //dumps preload during deploy
   chassis.pid(-72, 36, -PI/2);
+    while(!chassis.getSettled()){ //might be removed -> autoblocks with while loop
+      pros::delay(20);
+    }
   chassis.pid(-72,0,-3*PI/4);
-  //while settled -> every time before switchMode(2)
+    while(!chassis.getSettled()){
+      pros::delay(20);
+    }
     conveyor.switchMode(2);
   chassis.pid(0,96,0);
     conveyor.switchMode(5);
     pros::delay(1000);
   chassis.pid(0,72,-PI);
+    while(!chassis.getSettled()){
+      pros::delay(20);
+    }
     conveyor.switchMode(2);
   chassis.pid(-72,72,-PI/2);
     conveyor.switchMode(5);
     pros::delay(1000);
-    conveyor.switchMode(2);
+    while(!chassis.getSettled()){
+      pros::delay(20);
+    }
+    conveyor.switchMode(1);
   chassis.pid(-72,108,-PI/2);
     conveyor.switchMode(5);
     pros::delay(1000);
   chassis.pid(-72,144,-PI/4);
-    conveyor.switchMode(2);
+    while(!chassis.getSettled()){
+      pros::delay(20);
+    }
+    conveyor.switchMode(1);
   chassis.pid(-48,120,PI/2);
     conveyor.switchMode(5);
     pros::delay(1000);
   chassis.pid(0,120,0);
-    conveyor.switchMode(2);    
-  chassis.pid(72,144,PI/4);
-    conveyor.switchMode(5);
-    pros::delay(1000);
-    conveyor.switchMode(2);
+    while(!chassis.getSettled()){
+      pros::delay(20);
+    }
+    conveyor.switchMode(1);
   chassis.pid(72,108,PI/2);
     conveyor.switchMode(5);
     pros::delay(1000);
+  chassis.pid(72,144,PI/4);
+    while(!chassis.getSettled()){
+      pros::delay(20);
+    }
+    conveyor.switchMode(2);
   chassis.pid(0,48,-3*PI/4);
+    conveyor.switchMode(5);
+    pros::delay(1000);
   chassis.pid(24,72,PI/2);
   chassis.pid(72,72,PI/2);
-    conveyor.switchMode(2);
+    while(!chassis.getSettled()){
+      pros::delay(20);
+    }
+    conveyor.switchMode(3);
   chassis.pid(72,36,PI/2);
     conveyor.switchMode(5);
     pros::delay(1000);
   chassis.pid(36,24,-PI);
   chassis.pid(72,0,3*PI/4);
+    while(!chassis.getSettled()){
+      pros::delay(20);
+    }
     conveyor.switchMode(2);
+  chassis.pid(48,24,PI);
+    conveyor.switchMode(5);
 }

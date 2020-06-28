@@ -35,10 +35,12 @@ class Conveyor
         void position(int ball);
 
         double get_line();
+        void switchGate();
 
     private:
         static bool isRunning;
         static int mode;
         static bool is_reached;     
         static int count;
+        static bool gate;
 };

@@ -23,6 +23,9 @@ void opcontrol()
     intakeL.set_brake_mode(MOTOR_BRAKE_HOLD);
     intakeR.set_brake_mode(MOTOR_BRAKE_HOLD);
 
+    intake.switchGate();
+    conveyor.switchGate();
+
     while (true)
     {
         LB.move(master.get_analog(ANALOG_RIGHT_Y)-master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y));
@@ -47,7 +50,7 @@ void opcontrol()
         } else if(master.get_digital(DIGITAL_X)){
             conveyor.switchMode(3); //3
         } else if(master.get_digital(DIGITAL_Y)){ //reset ball position -> change intake
-            conveyor.switchMode(5); //127
+            conveyor.switchMode(6); //-127
         } else {
             conveyor.switchMode(4); //off
         }

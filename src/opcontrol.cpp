@@ -28,10 +28,10 @@ void opcontrol()
 
     while (true)
     {
-        LB.move(master.get_analog(ANALOG_RIGHT_Y)-master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y));
-        LF.move(master.get_analog(ANALOG_RIGHT_Y)+master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y));
-        RF.move(master.get_analog(ANALOG_RIGHT_Y)+master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y));
-        RB.move(master.get_analog(ANALOG_RIGHT_Y)-master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y));
+        LB.move((master.get_analog(ANALOG_RIGHT_Y)-master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y))/3);
+        LF.move((master.get_analog(ANALOG_RIGHT_Y)+master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y))/3);
+        RF.move((master.get_analog(ANALOG_RIGHT_Y)+master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y))/3);
+        RB.move((master.get_analog(ANALOG_RIGHT_Y)-master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y))/3);
 
         //intake
         if(master.get_digital(DIGITAL_L1)||master.get_digital(DIGITAL_Y)){

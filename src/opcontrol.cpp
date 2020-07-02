@@ -28,7 +28,7 @@ void opcontrol()
 
     while (true)
     {
-        LB.move((master.get_analog(ANALOG_RIGHT_Y)-master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y))/3);
+        LB.move((master.get_analog(ANALOG_RIGHT_Y)-master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y))/3); //max 127*3, divide by 3 to scale back down
         LF.move((master.get_analog(ANALOG_RIGHT_Y)+master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y))/3);
         RF.move((master.get_analog(ANALOG_RIGHT_Y)+master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y))/3);
         RB.move((master.get_analog(ANALOG_RIGHT_Y)-master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y))/3);

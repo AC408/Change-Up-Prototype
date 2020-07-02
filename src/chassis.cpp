@@ -311,6 +311,11 @@ void Chassis::track(){
             double radB = h2/ang;
             h2 = (radB + back)*2*sin(ang/2); //back
         } 
+        if(h == -(right-lastRight)){
+            h2 = 0;
+            h = 0;
+            ang = (left-lastLeft)/(2*PI*base/2); //divide by circumference to find sector angle, radius = base/2 -> symmetrical
+        }
         //x and y calculated by getting x and y component of arc created from turning and strafing
         x = x + h2*cos(theta+ang/2) + h*sin(theta+ang/2);
         y = y - h2*sin(theta+ang/2) + h*cos(theta+ang/2);

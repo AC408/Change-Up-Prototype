@@ -28,10 +28,40 @@ void opcontrol()
 
     while (true)
     {
-        LB.move((master.get_analog(ANALOG_RIGHT_Y)-master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y))/3); //max 127*3, divide by 3 to scale back down
-        LF.move((master.get_analog(ANALOG_RIGHT_Y)+master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y))/3);
-        RF.move((master.get_analog(ANALOG_RIGHT_Y)+master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y))/3);
-        RB.move((master.get_analog(ANALOG_RIGHT_Y)-master.get_analog(ANALOG_RIGHT_X)+master.get_analog(ANALOG_LEFT_Y))/3);
+        //lin motion
+        float leftBack = master.get_analog(ANALOG_RIGHT_Y)-master.get_analog(ANALOG_RIGHT_X);
+        float leftFront = master.get_analog(ANALOG_RIGHT_Y)+master.get_analog(ANALOG_RIGHT_X);
+        float rightFront = master.get_analog(ANALOG_RIGHT_Y)-master.get_analog(ANALOG_RIGHT_X);
+        float rightBack = master.get_analog(ANALOG_RIGHT_Y)+master.get_analog(ANALOG_RIGHT_X);
+        float motorPwd[4] = {leftBack,leftFront,rightFront,rightBack};
+        if(abs(master.get_analog(ANALOG_RIGHT_X)+abs(master.get_analog(ANALOG_RIGHT_Y)))>(127*2)){
+            float max = abs(master.get_analog(ANALOG_RIGHT_X))+abs(master.get_analog(ANALOG_LEFT_X));
+            for(int i = 0; i < 4; i++){
+                motorPwd[i]*= 127/max; //proportion motor to each other and max voltage
+            }
+        }
+
+        //add rotation
+        float max = 0;
+        leftBack+=master.get_analog(ANALOG_LEFT_Y);
+        leftFront+=master.get_analog(ANALOG_LEFT_Y);
+        rightFront-=master.get_analog(ANALOG_LEFT_Y);
+        rightBack-=master.get_analog(ANALOG_LEFT_Y);
+        for(int i = 0; i < 4; i++){ //find max power
+            if(abs(motorPwd[i])>127){
+                max = abs(motorPwd[i]);
+            }
+        } if(max>0){
+            for(int i = 0; i<4; i++){
+                motorPwd[i]*=127/max; //proportion motor to each other and max voltage
+            }
+        }
+
+        //set drive motor
+        LB.move(leftBack);
+        LF.move(leftFront);
+        RF.move(rightFront);
+        RB.move(rightBack);
 
         //intake
         if(master.get_digital(DIGITAL_L1)||master.get_digital(DIGITAL_Y)){

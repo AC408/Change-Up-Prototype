@@ -159,6 +159,7 @@ void Conveyor::position(int balls){
         move(127);
         pros::delay(10);
     } mode = 4;
+    count = 0;
 }
 
 void Conveyor::switchGate(){
